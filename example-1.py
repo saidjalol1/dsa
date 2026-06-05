@@ -88,3 +88,59 @@ def find_file(file_system, file_name):
 
 print(find_file(file_system, "rasmlar-again"))
 
+
+# Memoization recursion
+
+def find_file_(file_system, file_name , memo):
+    if memo is None:
+        memo = {}
+    
+    if id(file_system) in memo:
+        return memo[id(file_system)]
+    
+    found = False
+    for item in file_system:
+        if item == file_name:
+            return True
+        elif item != file_name:
+            if isinstance(item, list):
+                return find_file(item, file_name, memo)
+    memo[id(file_system)] = found
+    return False
+
+print(find_file(file_system, "rasmlar-again"))
+
+
+def fib_memo(n, memo):
+    if memo is None:
+        memo = {}
+        
+    if n <= 1:
+        return n
+    
+    if n in memo:
+        return memo[n]
+    
+    result = fib_memo(n - 1, memo) + fib_memo(n - 2, memo)
+    
+    memo[n] = result
+    return result
+
+print(fib_memo(50, {}))
+
+def climb_stairs(n, memo):
+    if memo is None:
+        memo = {}
+        
+    if n == 0: return 1
+    if n < 0: return 0
+    
+    if n in memo:
+        return memo[n]
+    
+    result =  climb_stairs(n - 1, memo) + climb_stairs(n - 2, memo)
+    memo[n] = result
+    return result
+
+print(climb_stairs(3, {}))
+print(climb_stairs(30, {}))

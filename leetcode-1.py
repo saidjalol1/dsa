@@ -1,4 +1,4 @@
-# Reg-ex match
+# Reg-ex match (need to be solved by recursion using memoization technique)
 
 
 def ismatch(s:str, p:str):

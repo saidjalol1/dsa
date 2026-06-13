@@ -36,6 +36,16 @@ class DynamicArray:
         self.data[self.size] = value
         self.size += 1
     
+    def pop(self):
+        if self.size == 0:
+            raise IndexError("Empty array")
+        
+        last_element = self.data[self.size - 1]
+        self.data[self.size - 1] = None
+        self.size -= 1
+        
+        return last_element
+    
     def __resize__(self):
         self.capacity *= 2
         new_array = [None] * self.capacity
@@ -44,3 +54,6 @@ class DynamicArray:
             new_array[i] = self.data[i]
         
         self.data = new_array
+        
+    def __str__(self):
+        return str(self.data[:self.size])

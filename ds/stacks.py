@@ -8,7 +8,12 @@ Core operations:
     3) peek / top - displays element from the top element without removing it and takes O(1) time
     4) is_empty - checks wether the stack has elements or not 
     5) accessing the element by value or searching takes O(n) because you need to pop every element to access certain data
-    
+   
+   
+Types of Queues:
+    1) Circular Queues  
+    2) Priority Queues 
+    4) Dounle ended Queues
 """
 
 

@@ -153,7 +153,6 @@ def reverse_vowels(s):
     return "".join(s_list)
 
 
-nums = [2,0,2,1,1,0]
 def sort_colors(arr):
     white_start = 0
     green_start = len(arr) - 1
@@ -172,4 +171,3 @@ def sort_colors(arr):
         
     return arr
             
-print(sort_colors(nums))

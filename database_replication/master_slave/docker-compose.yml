@@ -1,7 +1,9 @@
+
 services:
     master_db:
-        image: postgres:15
+        image: postgres
         container_name: master_db
+        restart: 3
         environment:
             POSTGRES_USER: ${MASTER_USER}
             POSTGRES_PASSWORD: ${MASTER_PASSWORD}
@@ -10,120 +12,117 @@ services:
         ports:
             - '5432:5432'
         volumes:
-            - master_data:/var/lib/postgresql/data
+            - master_data:/var/lib/postgresql
 
     slave_1:
-        image: postgres:15
+        image: postgres
         container_name: slave_1
+        user: postgres
         environment:
             POSTGRES_PASSWORD: ${MASTER_PASSWORD}
         ports:
             - "5433:5432"
         volumes:
-            - slave_1_data:/var/lib/postgresql/data
+            - slave_1_data:/var/lib/postgresql
         command: |
             bash -c "
-            rm -rf /var/lib/postgresql/data/*
-
-            until pg_isready -h master_db -p 5432 -U ${MASTER_USER}; do 
-                  echo 'Master ishga tushishi kutilmoqda...'
-                  sleep 1
-            done
-
+            rm -rf /var/lib/postgresql/*
+            until pg_isready -h master_db -p 5432 -U ${MASTER_USER}; do sleep 1; done
             sleep 2
-
-            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/data -U ${MASTER_USER} -Fp -Xs -P -R
-
-            # Windows permission xatosini chetlab o'tish uchun serverni --no-sync bilan yurgizamiz
+            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/18/docker -U ${MASTER_USER} -Fp -Xs -P -R
             exec postgres
             "
         depends_on:
             - master_db
 
     slave_2:
-        image: postgres:15
+        image: postgres
         container_name: slave_2
+        user: postgres
         environment:
             POSTGRES_PASSWORD: ${MASTER_PASSWORD}
         ports:
             - "5434:5432"
         volumes:
-            - slave_2_data:/var/lib/postgresql/data
+            - slave_2_data:/var/lib/postgresql
         command: |
             bash -c "
-            rm -rf /var/lib/postgresql/data/*
+            rm -rf /var/lib/postgresql/*
             until pg_isready -h master_db -p 5432 -U ${MASTER_USER}; do sleep 1; done
             sleep 2
-            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/data -U ${MASTER_USER} -Fp -Xs -P -R
+            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/18/docker -U ${MASTER_USER} -Fp -Xs -P -R
             exec postgres
             "
         depends_on:
             - master_db
 
     slave_3:
-        image: postgres:15
+        image: postgres
         container_name: slave_3
+        user: postgres
         environment:
             POSTGRES_PASSWORD: ${MASTER_PASSWORD}
         ports:
             - "5435:5432"
         volumes:
-            - slave_3_data:/var/lib/postgresql/data
+            - slave_3_data:/var/lib/postgresql
         command: |
             bash -c "
-            rm -rf /var/lib/postgresql/data/*
+            rm -rf /var/lib/postgresql/*
             until pg_isready -h master_db -p 5432 -U ${MASTER_USER}; do sleep 1; done
             sleep 2
-            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/data -U ${MASTER_USER} -Fp -Xs -P -R
+            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/18/docker -U ${MASTER_USER} -Fp -Xs -P -R
             exec postgres
             "
         depends_on:
             - master_db
 
     slave_4:
-        image: postgres:15
+        image: postgres
         container_name: slave_4
+        user: postgres
         environment:
             POSTGRES_PASSWORD: ${MASTER_PASSWORD}
         ports:
             - "5436:5432"
         volumes:
-            - slave_4_data:/var/lib/postgresql/data
+            - slave_4_data:/var/lib/postgresql
         command: |
             bash -c "
-            rm -rf /var/lib/postgresql/data/*
+            rm -rf /var/lib/postgresql/*
             until pg_isready -h master_db -p 5432 -U ${MASTER_USER}; do sleep 1; done
             sleep 2
-            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/data -U ${MASTER_USER} -Fp -Xs -P -R
+            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/18/docker -U ${MASTER_USER} -Fp -Xs -P -R
             exec postgres
             "
         depends_on:
             - master_db
 
     slave_5:
-        image: postgres:15
+        image: postgres
         container_name: slave_5
+        user: postgres
         environment:
             POSTGRES_PASSWORD: ${MASTER_PASSWORD}
         ports:
             - "5437:5432"
         volumes:
-            - slave_5_data:/var/lib/postgresql/data
+            - slave_5_data:/var/lib/postgresql
         command: |
             bash -c "
-            rm -rf /var/lib/postgresql/data/*
+            rm -rf /var/lib/postgresql/*
             until pg_isready -h master_db -p 5432 -U ${MASTER_USER}; do sleep 1; done
             sleep 2
-            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/data -U ${MASTER_USER} -Fp -Xs -P -R
+            PGPASSWORD=${MASTER_PASSWORD} pg_basebackup -h master_db -D /var/lib/postgresql/18/docker -U ${MASTER_USER} -Fp -Xs -P -R
             exec postgres
             "
         depends_on:
             - master_db
             
 volumes:
-  master_data:
-  slave_1_data:
-  slave_2_data:
-  slave_3_data:
-  slave_4_data:
-  slave_5_data:
+    master_data:
+    slave_1_data:
+    slave_2_data:
+    slave_3_data:
+    slave_4_data:
+    slave_5_data:

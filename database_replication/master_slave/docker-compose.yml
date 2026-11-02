@@ -3,7 +3,7 @@ services:
     master_db:
         image: postgres
         container_name: master_db
-        restart: 3
+        restart: 'unless-stopped'
         environment:
             POSTGRES_USER: ${MASTER_USER}
             POSTGRES_PASSWORD: ${MASTER_PASSWORD}
@@ -118,6 +118,24 @@ services:
             "
         depends_on:
             - master_db
+    
+    haproxy:
+        image: haproxy:latest
+        container_name: haproxy_lb
+        restart: 'unless-stopped'
+        ports:
+            - "5000:5000" 
+            - "5001:5001" 
+        volumes:
+            - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+        command: ["haproxy", "-f", "/usr/local/etc/haproxy/haproxy.cfg"]
+        depends_on:
+            - master_db
+            - slave_1
+            - slave_2
+            - slave_3
+            - slave_4
+            - slave_5
             
 volumes:
     master_data:
